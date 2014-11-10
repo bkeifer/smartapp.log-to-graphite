@@ -35,6 +35,7 @@ preferences {
         input "switches", "capability.switch", title: "Switches", required: false, multiple: true
         input "batteries", "capability.battery", title: "Batteries", required:false, multiple: true
         input "thermostats", "capability.thermostat", title: "Thermostat Setpoints", required: false, multiple: true
+        input "energymeters", "capability.energyMeter", title: "Energy Meters", required: false, multiple: true
     }
     section ("Graphite Server") {
     	input "graphite_host", "text", title: "Graphite Hostname/IP"
@@ -116,6 +117,20 @@ def checkSensors() {
         logitems.add([t.displayName, "thermostat", t.latestValue("setPoint")] )
         state[t.displayName + ".setPoint"] = t.latestValue("setPoint")
         log.debug("[thermostat] " + t.displayName + ": " + t.latestValue("setPoint"))
+    }
+
+    for (t in settings.energymeters) {
+        logitems.add([t.displayName + ".power", "energy", t.latestValue("power")])
+        state[t.displayName + ".Watts"] = t.latestValue("power")
+        log.debug("[energy] " + t.displayName + ": " + t.latestValue("power"))
+
+        logitems.add([t.displayName + ".amps", "energy", t.latestValue("amps")])
+        state[t.displayName + ".Amps"] = t.latestValue("amps")
+        log.debug("[energy] " + t.displayName + ": " + t.latestValue("amps"))
+
+		logitems.add([t.displayName + ".volts", "energy", t.latestValue("volts")])
+        state[t.displayName + ".Volts"] = t.latestValue("volts")
+        log.debug("[energy] " + t.displayName + ": " + t.latestValue("volts"))
     }
 
 	logField2(logitems)
