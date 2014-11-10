@@ -151,7 +151,7 @@ private logField2(logItems) {
 		log.debug json
 
 		def params = [
-        	uri: "http://graphite.valinor.net:5000/publish/${item[1]}",
+        	uri: "http://${graphite_host}:${graphite_port}/publish/${item[1]}",
             body: json
         ]
         try {
